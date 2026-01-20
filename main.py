@@ -20,14 +20,41 @@ def save_students():
             name, surname = student.split(" ")
             file.write(f"{name},{surname},{grade}\n")
 
+def get_valid_name(context):
+    while True:
+        name = input(context).strip()
+        if not name:
+            print("Name is required.")
+            continue
+        if not name.isalpha():
+            print("Must contain only letters.")
+            continue
+
+        return name.upper()
+def get_valid_grade():
+    while True:
+        grade = input("Enter student grade (0-100): ")
+
+        if not grade.isdigit():
+            print("Grade must be a number.")
+            continue
+        grade = int(grade)
+        if 0 <= grade <= 100:
+            return str(grade)
+        print("Grade must be between 0 and 100.")
 
 
 def add_student():
     try:
-        name = input("Enter student name: ").upper()
-        surname = input("Enter student surname: ").upper()
-        grade = input("Enter student grade: ")
-        students[f"{name} {surname}"] = grade
+        name = get_valid_name("Enter student name: ")
+        surname = get_valid_name("Enter Student Surname: ")
+        grade = get_valid_grade()
+        full_name = f"{name} {surname}"
+        if full_name in students:
+            print("Student with that name already exists.")
+            return
+
+        students[full_name] = grade
         save_students()
 
         print("Student added.")
@@ -38,14 +65,14 @@ def add_student():
 
 
 def update_grade():
-    name = input("Enter student name: ").upper()
-    surname = input("Enter student surname: ").upper()
+    name = get_valid_name("Enter student name: ")
+    surname = get_valid_name("Enter Student Surname: ")
     full_name = f"{name} {surname}"
     if full_name not in students:
         print("Student not found.")
         return
 
-    new_grade = input("Enter new grade: ")
+    new_grade = get_valid_grade()
     students[full_name] = new_grade
     save_students()
     print("Student updated.")
