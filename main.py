@@ -1,3 +1,5 @@
+from logging import exception
+
 students = {}
 
 def load_students():
@@ -59,8 +61,8 @@ def add_student():
 
         print("Student added.")
 
-    except:
-        print("Something went wrong.")
+    except Exception as e:
+        print("Something went wrong.",f"{type(e)}: {e}")
 
 
 
@@ -82,7 +84,7 @@ def show_students():
     if not students:
         print("No students found.")
         return
-    for name,grade in students.items():
+    for name,grade in sorted(students.items()):
         print(f"{name} - Grade: {grade}")
 
 
@@ -97,7 +99,7 @@ def show_menu():
     print("4. Exit")
     running = True
     while running:
-        choice = input("Choose an option: ")
+        choice = input("Choose an option: ").strip()
 
         if choice == "1":
             add_student()
